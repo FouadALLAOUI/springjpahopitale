@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template1.html"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+     <div class="p-3">
+         <div class="card">
+             <div class="card-header">Liste Patients</div>
+             <div class="card-body">
+
+                 <form method="get" th:action="@{index}">
+                      <label>Keyword:</label>
+                     <input type="text" name="keyword" th:value="${keyword}" >
+                     <button type="submit" class="btn btn-info">Chercher <i class="bi bi-search"></i></button>
+                 </form>
+
+                 <table class="table">
+                     <thead>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Date</th>
+                        <th>Malade</th>
+                        <th>Score</th>
+                     </thead>
+                     <tbody>
+                       <tr th:each="p:${listPatients}">
+                         <td th:text="${p.id}"></td>
+                         <td th:text="${p.nom}"></td>
+                         <td th:text="${p.dateNessance}"></td>
+                         <td th:text="${p.malade}"></td>
+                         <td th:text="${p.score}"></td>
+                           <td>
+                               <a onclick="javascript:return confirm('Etes vous sure !')"
+                                  th:href="@{delete(id=${p.id}, keyword=${keyword}, page=${currentPage})}" class="btn btn-danger">Delete
+                                   <i class="bi bi-trash"></i>
+                               </a>
+                           </td>
+                           <td>
+                               <a class="btn btn-success"
+                                  th:href="@{/editPatient(id=${p.id})}" >Edit
+                                   <i class="bi bi-pen"></i>
+                               </a>
+                           </td>
+                       </tr>
+                     </tbody>
+                 </table>
+                 <ul class="nav nav-pills">
+                     <li th:each="page,status:${pages}">
+                         <a th:href="@{/index(page=${status.index},keyword=${keyword})}"
+                            th:class="${currentPage==status.index?'btn btn-info ms-1':'btn btn-outline-info ms-1'}"
+                            th:text="${1+status.index}"></a>
+                     </li>
+                 </ul>
+
+             </div>
+         </div>
+     </div>
+</div>
+</body>
+</html>
